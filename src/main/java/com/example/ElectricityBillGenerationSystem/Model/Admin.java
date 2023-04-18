@@ -35,6 +35,8 @@ public class Admin {
     private List<Slab> slabList=new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL)
+    private List<Bill> billList = new ArrayList<>();
 
 
 }

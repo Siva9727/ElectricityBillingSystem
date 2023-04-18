@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -104,5 +105,22 @@ public class AdminService {
         return "Updated slab rate";
     }
 
+    public List<BillDto> getAllBills(){
+        List<Bill> billList = billRepository.findAll();
+        List<BillDto> billDtoList = new ArrayList<>();
+
+        for (Bill bill : billList){
+            BillDto billDto = new BillDto();
+            billDto.setConsumption_Units(bill.getConsumption_Units());
+            billDto.setCustomer_Name(bill.getCustomer_Name());
+            billDto.setPeriod(bill.getPeriod());
+            billDto.setBill_Amount(bill.getBill_Amount());
+            billDto.setCustomer_ID(bill.getConsumer().getId());
+            billDto.setBillGeneratedOn(bill.getBillGeneratedOn());
+
+            billDtoList.add(billDto);
+        }
+        return billDtoList;
+    }
 
 }

@@ -62,6 +62,8 @@ public class ConsumerService {
         Consumer consumer = consumerRepository.findById(id).get();
         BillDto bill = new BillDto();
 
+        Admin admin = consumer.getAdmin();
+
         bill.setCustomer_ID(id);
         bill.setCustomer_Name(consumer.getName());
 
@@ -118,6 +120,7 @@ public class ConsumerService {
         //bill amount
 
 
+
         bill.setConsumption_Units(units);
 
         bill.setBill_Amount(bill_amount);
@@ -129,6 +132,9 @@ public class ConsumerService {
         // dto to bill
         Bill ogBill = new Bill();
         ogBill.setBill_Amount(bill.getBill_Amount());
+
+        ogBill.setAdmin(admin);
+
 
         ogBill.setConsumer(consumer);
         ogBill.setCustomer_Name(consumer.getName());

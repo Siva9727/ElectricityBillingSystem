@@ -35,4 +35,8 @@ public class Bill {
     @JoinColumn
     private Consumer consumer;
 
+    @ManyToOne
+    @JoinColumn
+    private Admin admin;
+
 }

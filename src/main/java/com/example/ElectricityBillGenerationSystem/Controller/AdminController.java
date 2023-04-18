@@ -7,6 +7,7 @@ import com.example.ElectricityBillGenerationSystem.Model.Slab;
 import com.example.ElectricityBillGenerationSystem.Service.AdminService;
 import com.example.ElectricityBillGenerationSystem.Service.SlabService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,5 +57,9 @@ public class AdminController {
         return adminService.updateSlab(updateSlabRequestDto);
     }
 
+    @GetMapping("/all-bills")
+    public List<BillDto> getAllBills(){
+        return adminService.getAllBills();
+    }
 
 }
