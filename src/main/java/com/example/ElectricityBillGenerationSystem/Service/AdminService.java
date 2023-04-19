@@ -49,10 +49,15 @@ public class AdminService {
 
         List<Reading> readingList = consumer.getReadingList();
 
-        Reading reading = new Reading();
-        reading.setCurrentReading(setReadingDto.getCurrentReading());
-        reading.setAdmin(admin);
-        reading.setConsumer(consumer);
+//        Reading reading = new Reading();
+//        reading.setCurrentReading(setReadingDto.getCurrentReading());
+//        reading.setAdmin(admin);
+//        reading.setConsumer(consumer);
+        Reading reading = Reading.builder()
+                .CurrentReading(setReadingDto.getCurrentReading())
+                .admin(admin)
+                .consumer(consumer)
+                .build();
 
         readingList.add(reading);
 
