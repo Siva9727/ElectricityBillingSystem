@@ -4,6 +4,8 @@ import com.example.ElectricityBillGenerationSystem.DTOs.BillDto;
 import com.example.ElectricityBillGenerationSystem.DTOs.SetReadingDto;
 import com.example.ElectricityBillGenerationSystem.DTOs.UpdateConsumerDto;
 import com.example.ElectricityBillGenerationSystem.DTOs.UpdateSlabRequestDto;
+import com.example.ElectricityBillGenerationSystem.Mappers.AdminServiceMapper;
+import com.example.ElectricityBillGenerationSystem.Mappers.AllBillsMapper;
 import com.example.ElectricityBillGenerationSystem.Model.*;
 import com.example.ElectricityBillGenerationSystem.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +55,17 @@ public class AdminService {
 //        reading.setCurrentReading(setReadingDto.getCurrentReading());
 //        reading.setAdmin(admin);
 //        reading.setConsumer(consumer);
-        Reading reading = Reading.builder()
-                .CurrentReading(setReadingDto.getCurrentReading())
-                .admin(admin)
-                .consumer(consumer)
-                .build();
+
+        // using mapper annotation and builder function to create an instance
+//        Reading reading = Reading.builder()
+//                .CurrentReading(setReadingDto.getCurrentReading())
+//                .admin(admin)
+//                .consumer(consumer)
+//                .build();
+        // creating separate mapper class for the mapping func
+
+        Reading reading = AdminServiceMapper.reading(setReadingDto,admin,consumer);
+
 
         readingList.add(reading);
 
@@ -89,6 +97,7 @@ public class AdminService {
         return "consumer updated";
     }
 
+
     public String deleteUser(int id){
         consumerRepository.deleteById(id);
         return "consumer deleted";
@@ -115,15 +124,28 @@ public class AdminService {
         List<BillDto> billDtoList = new ArrayList<>();
 
         for (Bill bill : billList){
-            BillDto billDto = new BillDto();
-            billDto.setConsumption_Units(bill.getConsumption_Units());
-            billDto.setCustomer_Name(bill.getCustomer_Name());
-            billDto.setPeriod(bill.getPeriod());
-            billDto.setBill_Amount(bill.getBill_Amount());
-            billDto.setCustomer_ID(bill.getConsumer().getId());
-            billDto.setBillGeneratedOn(bill.getBillGeneratedOn());
+//            BillDto billDto = new BillDto();
+//            billDto.setConsumption_Units(bill.getConsumption_Units());
+//            billDto.setCustomer_Name(bill.getCustomer_Name());
+//            billDto.setPeriod(bill.getPeriod());
+//            billDto.setBill_Amount(bill.getBill_Amount());
+//            billDto.setCustomer_ID(bill.getConsumer().getId());
+//            billDto.setBillGeneratedOn(bill.getBillGeneratedOn());
+
+            // using builder
+//            BillDto billDto = BillDto.builder()
+//                    .Bill_Amount(bill.getBill_Amount())
+//                    .billGeneratedOn(bill.getBillGeneratedOn())
+//                    .Consumption_Units(bill.getConsumption_Units())
+//                    .Customer_ID(bill.getConsumer().getId())
+//                    .Customer_Name(bill.getCustomer_Name())
+//                    .Period(bill.getPeriod())
+//                    .build();
+
+            BillDto billDto = AllBillsMapper.getDto(bill);
 
             billDtoList.add(billDto);
+
         }
         return billDtoList;
     }

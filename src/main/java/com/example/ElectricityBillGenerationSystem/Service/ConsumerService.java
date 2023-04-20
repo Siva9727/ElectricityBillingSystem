@@ -3,6 +3,7 @@ package com.example.ElectricityBillGenerationSystem.Service;
 
 import com.example.ElectricityBillGenerationSystem.DTOs.BillDto;
 import com.example.ElectricityBillGenerationSystem.DTOs.UpdateConsumerDto;
+import com.example.ElectricityBillGenerationSystem.Mappers.*;
 import com.example.ElectricityBillGenerationSystem.Model.*;
 import com.example.ElectricityBillGenerationSystem.Repository.BillRepository;
 import com.example.ElectricityBillGenerationSystem.Repository.ConsumerRepository;
@@ -33,19 +34,39 @@ public class ConsumerService {
 
 
     public String addConsumer(Consumer consumer) {
-        Consumer consumer1 =new Consumer();
-        consumer1.setName(consumer.getName());
-        consumer1.setEmail(consumer.getEmail());
-        consumer1.setPassword(consumer.getPassword());
-        consumer1.setMobNo(consumer.getMobNo());
-        consumer1.setCity(consumer.getCity());
+//        Consumer consumer1 =new Consumer();
+//        consumer1.setName(consumer.getName());
+//        consumer1.setEmail(consumer.getEmail());
+//        consumer1.setPassword(consumer.getPassword());
+//        consumer1.setMobNo(consumer.getMobNo());
+//        consumer1.setCity(consumer.getCity());
 
-        Reading reading = new Reading();
+        // use builder
+//        Consumer consumer1 = Consumer.builder()
+//                .name(consumer.getName())
+//                .email(consumer.getEmail())
+//                .password(consumer.getPassword())
+//                .mobNo(consumer.getMobNo())
+//                .city(consumer.getCity())
+//                .build();
+
+        Consumer consumer1 = AddConsumerMapper.addConsumerDetails(consumer);
+
+
         Admin admin = consumer1.getAdmin();
 
-        reading.setConsumer(consumer1);
-        reading.setCurrentReading(0);
-        reading.setAdmin(admin);
+//        Reading reading = new Reading();
+//        reading.setConsumer(consumer1);
+//        reading.setCurrentReading(0);
+//        reading.setAdmin(admin);
+
+//        Reading reading = Reading.builder()
+//                .consumer(consumer1)
+//                .CurrentReading(0)
+//                .admin(admin)
+//                .build();
+
+        Reading reading = AddConsumerMapper.setInitialReading(consumer1,admin);
 
         List<Reading> readingList = consumer1.getReadingList();
         readingList.add(reading);
@@ -60,12 +81,8 @@ public class ConsumerService {
 
     public BillDto generateBill(int id) {
         Consumer consumer = consumerRepository.findById(id).get();
-        BillDto bill = new BillDto();
-
         Admin admin = consumer.getAdmin();
 
-        bill.setCustomer_ID(id);
-        bill.setCustomer_Name(consumer.getName());
 
         //Units
         List<Reading> readingList = readingRepository.findLatestTwoReadingsByConsumerId(consumer.getId());
@@ -117,35 +134,53 @@ public class ConsumerService {
             }
         }
 
-        //bill amount
-
-
-
-        bill.setConsumption_Units(units);
-
-        bill.setBill_Amount(bill_amount);
-
         //period
         String period = readingList.get(0).getReadingDate() +" to " + readingList.get(1).getReadingDate();
-        bill.setPeriod(period);
+
+        //bill amount
+
+//        BillDto bill = new BillDto();
+//
+//        bill.setCustomer_ID(id);
+//        bill.setCustomer_Name(consumer.getName());
+//        bill.setConsumption_Units(units);
+//        bill.setBill_Amount(bill_amount);
+//        bill.setPeriod(period);
+
+//        BillDto bill = BillDto.builder()
+//                .Customer_ID(id)
+//                .Customer_Name(consumer.getName())
+//                .Consumption_Units(units)
+//                .Bill_Amount(bill_amount)
+//                .Period(period)
+//                .build();
+
+        BillDto bill = BillDtoMapper.BillDtoGeneration(id,consumer,units,bill_amount,period);
+
+
 
         // dto to bill
-        Bill ogBill = new Bill();
-        ogBill.setBill_Amount(bill.getBill_Amount());
+//        Bill ogBill = new Bill();
+//        ogBill.setBill_Amount(bill.getBill_Amount());
+//        ogBill.setAdmin(admin);
+//        ogBill.setConsumer(consumer);
+//        ogBill.setCustomer_Name(consumer.getName());
+//        ogBill.setPeriod(bill.getPeriod());
+//        ogBill.setConsumption_Units(bill.getConsumption_Units());
 
-        ogBill.setAdmin(admin);
+//        Bill ogBill = Bill.builder()
+//                .billGeneratedOn(bill.getBillGeneratedOn())
+//                .Bill_Amount(bill.getBill_Amount())
+//                .admin(admin)
+//                .consumer(consumer)
+//                .Consumption_Units(bill.getConsumption_Units())
+//                .Customer_Name(consumer.getName())
+//                .Period(bill.getPeriod())
+//                .build();
 
-
-        ogBill.setConsumer(consumer);
-        ogBill.setCustomer_Name(consumer.getName());
-        ogBill.setPeriod(bill.getPeriod());
-        ogBill.setConsumption_Units(bill.getConsumption_Units());
+        Bill ogBill = BillGenerationMapper.generate(bill,admin,consumer);
 
         billRepository.save(ogBill);
-//        Bill bill1 = billRepository.findById(consumer.getId()).get();
-
-
-
 
         return getBill(ogBill.getConsumer().getId());
     }
@@ -153,13 +188,16 @@ public class ConsumerService {
     public String updateConsumerDetails(UpdateConsumerDto updateConsumerDto){
 
         // convert dto entity
-        Consumer originalConsumer = consumerRepository.findById(updateConsumerDto.getId()).get();
-        originalConsumer.setCity(updateConsumerDto.getCity());
-        originalConsumer.setMobNo(updateConsumerDto.getMobNo());
-        originalConsumer.setName(updateConsumerDto.getName());
-        originalConsumer.setEmail(updateConsumerDto.getEmail());
-        originalConsumer.setPassword(updateConsumerDto.getPassword());
+//        Consumer originalConsumer = consumerRepository.findById(updateConsumerDto.getId()).get();
+//
+//        originalConsumer.setCity(updateConsumerDto.getCity());
+//        originalConsumer.setMobNo(updateConsumerDto.getMobNo());
+//        originalConsumer.setName(updateConsumerDto.getName());
+//        originalConsumer.setEmail(updateConsumerDto.getEmail());
+//        originalConsumer.setPassword(updateConsumerDto.getPassword());
 
+
+        Consumer originalConsumer =  UpdateConsumerMapper.updateConsumer(updateConsumerDto);
         // save entity to repo
         consumerRepository.save(originalConsumer);
 
@@ -169,14 +207,28 @@ public class ConsumerService {
 
 
     public BillDto getBill(int consumerId){
-        BillDto billDto = new BillDto();
+
         Bill bill =  billRepository.findBillByConsumerId(consumerId);
-        billDto.setBill_Amount(bill.getBill_Amount());
-        billDto.setPeriod(bill.getPeriod());
-        billDto.setCustomer_ID(bill.getConsumer().getId());
-        billDto.setCustomer_Name(bill.getCustomer_Name());
-        billDto.setBillGeneratedOn(bill.getBillGeneratedOn());
-        billDto.setConsumption_Units(bill.getConsumption_Units());
+
+//        BillDto billDto = new BillDto();
+//        billDto.setBill_Amount(bill.getBill_Amount());
+//        billDto.setPeriod(bill.getPeriod());
+//        billDto.setCustomer_ID(bill.getConsumer().getId());
+//        billDto.setCustomer_Name(bill.getCustomer_Name());
+//        billDto.setBillGeneratedOn(bill.getBillGeneratedOn());
+//        billDto.setConsumption_Units(bill.getConsumption_Units());
+
+
+//        BillDto billDto = BillDto.builder()
+//                .Bill_Amount(bill.getBill_Amount())
+//                .Period(bill.getPeriod())
+//                .Customer_ID(bill.getConsumer().getId())
+//                .Customer_Name(bill.getCustomer_Name())
+//                .billGeneratedOn(bill.getBillGeneratedOn())
+//                .Consumption_Units(bill.getConsumption_Units())
+//                .build();
+
+        BillDto billDto = GetBillMapper.getBillMapping(bill);
 
         return billDto;
     }

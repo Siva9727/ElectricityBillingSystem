@@ -1,6 +1,7 @@
 package com.example.ElectricityBillGenerationSystem.DTOs;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BillDto {
 
     @CreationTimestamp

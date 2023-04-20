@@ -1,6 +1,7 @@
 package com.example.ElectricityBillGenerationSystem.Model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name="consumer")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Consumer {
