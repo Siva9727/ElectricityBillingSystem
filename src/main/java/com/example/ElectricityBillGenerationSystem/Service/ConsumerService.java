@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -60,22 +61,20 @@ public class ConsumerService {
 //        reading.setCurrentReading(0);
 //        reading.setAdmin(admin);
 
-//        Reading reading = Reading.builder()
-//                .consumer(consumer1)
-//                .CurrentReading(0)
-//                .admin(admin)
-//                .build();
+        Reading reading = Reading.builder().consumer(consumer1).CurrentReading(0).admin(admin).build();
 
-        Reading reading = AddConsumerMapper.setInitialReading(consumer1,admin);
-
+//        Reading reading = AddConsumerMapper.setInitialReading(consumer1,admin);
+//
         List<Reading> readingList = consumer1.getReadingList();
+        if (readingList == null) {
+            readingList = new ArrayList<>();
+        }
         readingList.add(reading);
         consumer1.setReadingList(readingList);
 
 
-        consumerRepository.save(consumer1);
-
-        return "Registration Successful!";
+         consumerRepository.save(consumer1);
+         return "consumer created successfully";
     }
 
 

@@ -3,17 +3,22 @@ package com.example.ElectricityBillGenerationSystem.Mappers;
 import com.example.ElectricityBillGenerationSystem.Model.Admin;
 import com.example.ElectricityBillGenerationSystem.Model.Consumer;
 import com.example.ElectricityBillGenerationSystem.Model.Reading;
+import com.example.ElectricityBillGenerationSystem.Repository.AdminRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class AddConsumerMapper {
 
-    public static Consumer addConsumerDetails(Consumer consumer){
+    @Autowired
+    AdminRepository adminRepository;
+
+    public static Consumer addConsumerDetails(Consumer consumerDto){
 
         return Consumer.builder()
-                .name(consumer.getName())
-                .email(consumer.getEmail())
-                .password(consumer.getPassword())
-                .mobNo(consumer.getMobNo())
-                .city(consumer.getCity())
+                .name(consumerDto.getName())
+                .email(consumerDto.getEmail())
+                .password(consumerDto.getPassword())
+                .mobNo(consumerDto.getMobNo())
+                .city(consumerDto.getCity())
                 .build();
     }
 

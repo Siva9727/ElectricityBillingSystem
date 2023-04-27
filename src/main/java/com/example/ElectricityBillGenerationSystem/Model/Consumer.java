@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,14 +23,21 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull(message = "name column cannot be empty")
     private String name;
 
+    @Email(message = "Provide valid email address")
     private String email;
 
+    @NotNull
+    @Size(min = 4, max = 20)
     private String password;
 
+    @NotBlank
     private String city;
 
+    @NotNull
+    @Pattern(regexp = "^\\d{10}$", message = "mobile number should contain 10 digits")
     private String mobNo;
 
 

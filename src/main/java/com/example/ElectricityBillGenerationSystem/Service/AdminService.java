@@ -6,6 +6,7 @@ import com.example.ElectricityBillGenerationSystem.DTOs.UpdateConsumerDto;
 import com.example.ElectricityBillGenerationSystem.DTOs.UpdateSlabRequestDto;
 import com.example.ElectricityBillGenerationSystem.Mappers.AdminServiceMapper;
 import com.example.ElectricityBillGenerationSystem.Mappers.AllBillsMapper;
+import com.example.ElectricityBillGenerationSystem.Mappers.UpdateConsumerMapper;
 import com.example.ElectricityBillGenerationSystem.Model.*;
 import com.example.ElectricityBillGenerationSystem.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class AdminService {
@@ -83,13 +85,15 @@ public class AdminService {
 
     public String updateConsumerDetails(UpdateConsumerDto updateConsumerDto){
 
-        Consumer originalConsumer = consumerRepository.findById(updateConsumerDto.getId()).get();
+//        Consumer originalConsumer = consumerRepository.findById(updateConsumerDto.getId()).get();
+//
+//        originalConsumer.setCity(updateConsumerDto.getCity());
+//        originalConsumer.setMobNo(updateConsumerDto.getMobNo());
+//        originalConsumer.setName(updateConsumerDto.getName());
+//        originalConsumer.setEmail(updateConsumerDto.getEmail());
+//        originalConsumer.setPassword(updateConsumerDto.getPassword());
 
-        originalConsumer.setCity(updateConsumerDto.getCity());
-        originalConsumer.setMobNo(updateConsumerDto.getMobNo());
-        originalConsumer.setName(updateConsumerDto.getName());
-        originalConsumer.setEmail(updateConsumerDto.getEmail());
-        originalConsumer.setPassword(updateConsumerDto.getPassword());
+        Consumer originalConsumer = UpdateConsumerMapper.updateConsumer(updateConsumerDto);
 
         // save entity to repo
         consumerRepository.save(originalConsumer);
