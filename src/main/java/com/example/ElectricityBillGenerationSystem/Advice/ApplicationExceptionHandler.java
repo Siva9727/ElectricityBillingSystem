@@ -1,5 +1,6 @@
 package com.example.ElectricityBillGenerationSystem.Advice;
 
+import com.example.ElectricityBillGenerationSystem.Exception.ConsumerNotFoundException;
 import com.example.ElectricityBillGenerationSystem.VO.ErrorVo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -42,4 +40,19 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+
+
+    @ExceptionHandler(IndexOutOfBoundsException.class)
+    public ResponseEntity<String> handleIndexOutOfBoundsException(IndexOutOfBoundsException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body("Consumer Id is not found. Please provide the correct consumer ID");
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body("Consumer Id is not found. Please provide the correct consumer ID");
+    }
 }

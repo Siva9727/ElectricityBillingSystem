@@ -29,6 +29,7 @@ public class ConsumerController {
 
     }
 
+
     @GetMapping("/get-bill/{id}")
     public BillDto generateBill(@PathVariable int id){
         return consumerService.generateBill(id);

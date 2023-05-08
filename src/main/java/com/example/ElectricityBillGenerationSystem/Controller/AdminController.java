@@ -3,6 +3,7 @@ package com.example.ElectricityBillGenerationSystem.Controller;
 import com.example.ElectricityBillGenerationSystem.DTOs.*;
 import com.example.ElectricityBillGenerationSystem.Model.Admin;
 import com.example.ElectricityBillGenerationSystem.Model.Bill;
+import com.example.ElectricityBillGenerationSystem.Model.Consumer;
 import com.example.ElectricityBillGenerationSystem.Model.Slab;
 import com.example.ElectricityBillGenerationSystem.Service.AdminService;
 import com.example.ElectricityBillGenerationSystem.Service.SlabService;
@@ -61,5 +62,6 @@ public class AdminController {
     public List<BillDto> getAllBills(){
         return adminService.getAllBills();
     }
+
 
 }

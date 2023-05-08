@@ -80,15 +80,16 @@ public class ConsumerService {
 
     public BillDto generateBill(int id) {
         Consumer consumer = consumerRepository.findById(id).get();
-        Admin admin = consumer.getAdmin();
+
+            Admin admin = consumer.getAdmin();
 
 
-        //Units
-        List<Reading> readingList = readingRepository.findLatestTwoReadingsByConsumerId(consumer.getId());
+            //Units
+            List<Reading> readingList = readingRepository.findLatestTwoReadingsByConsumerId(consumer.getId());
 
-        int units = calculateUnits(readingList);
+            int units = calculateUnits(readingList);
 
-        //Slab rate
+            //Slab rate
 //        List<Slab> slabList = slabRepository.findAll();
 //        double firstSlab = slabList.get(0).getSlab_Rate();
 //        double secondSlab = slabList.get(1).getSlab_Rate();
@@ -116,27 +117,27 @@ public class ConsumerService {
 //            bill_amount = firstMaxUnit*firstSlab+(secondMaxUnit-secondMinUnit)*secondSlab+(thirdMaxUnit-thirdMinUnit)*thirdSlab+(fourthMaxUnit-units)*firstSlab;
 //        }
 
-        List<Slab> slabList = slabRepository.findAll(Sort.by("minUnit"));
+            List<Slab> slabList = slabRepository.findAll(Sort.by("minUnit"));
 
-        double bill_amount = 0;
-        double remainingUnits = units;
+            double bill_amount = 0;
+            double remainingUnits = units;
 
-        for (Slab slab : slabList) {
-            double slabRate = slab.getSlab_Rate();
-            double minUnit = slab.getMinUnit();
-            double maxUnit = slab.getMaxUnit();
+            for (Slab slab : slabList) {
+                double slabRate = slab.getSlab_Rate();
+                double minUnit = slab.getMinUnit();
+                double maxUnit = slab.getMaxUnit();
 
-            if (remainingUnits > 0) {
-                double slabUnits = Math.min(remainingUnits, maxUnit - minUnit);
-                bill_amount += slabUnits * slabRate;
-                remainingUnits -= slabUnits;
+                if (remainingUnits > 0) {
+                    double slabUnits = Math.min(remainingUnits, maxUnit - minUnit);
+                    bill_amount += slabUnits * slabRate;
+                    remainingUnits -= slabUnits;
+                }
             }
-        }
 
-        //period
-        String period = readingList.get(0).getReadingDate() +" to " + readingList.get(1).getReadingDate();
+            //period
+            String period = readingList.get(0).getReadingDate() +" to " + readingList.get(1).getReadingDate();
 
-        //bill amount
+            //bill amount
 
 //        BillDto bill = new BillDto();
 //
@@ -154,11 +155,11 @@ public class ConsumerService {
 //                .Period(period)
 //                .build();
 
-        BillDto bill = BillDtoMapper.BillDtoGeneration(id,consumer,units,bill_amount,period);
+            BillDto bill = BillDtoMapper.BillDtoGeneration(id,consumer,units,bill_amount,period);
 
 
 
-        // dto to bill
+            // dto to bill
 //        Bill ogBill = new Bill();
 //        ogBill.setBill_Amount(bill.getBill_Amount());
 //        ogBill.setAdmin(admin);
@@ -177,11 +178,13 @@ public class ConsumerService {
 //                .Period(bill.getPeriod())
 //                .build();
 
-        Bill ogBill = BillGenerationMapper.generate(bill,admin,consumer);
+            Bill ogBill = BillGenerationMapper.generate(bill,admin,consumer);
 
-        billRepository.save(ogBill);
+            billRepository.save(ogBill);
 
-        return getBill(ogBill.getConsumer().getId());
+            return getBill(ogBill.getConsumer().getId());
+
+
     }
 
     public String updateConsumerDetails(UpdateConsumerDto updateConsumerDto){
