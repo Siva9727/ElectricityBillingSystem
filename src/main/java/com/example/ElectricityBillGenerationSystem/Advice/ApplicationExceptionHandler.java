@@ -42,17 +42,36 @@ public class ApplicationExceptionHandler {
 
 
 
+//    @ExceptionHandler(IndexOutOfBoundsException.class)
+//    public ResponseEntity<String> handleIndexOutOfBoundsException(IndexOutOfBoundsException ex) {
+//        return ResponseEntity
+//                .badRequest()
+//                .body("Bill not yet generated for the consumer id");
+//    }
+
     @ExceptionHandler(IndexOutOfBoundsException.class)
-    public ResponseEntity<String> handleIndexOutOfBoundsException(IndexOutOfBoundsException ex) {
+    public ResponseEntity<Map<String,String>> handleIndexOutOfBoundsException(IndexOutOfBoundsException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message","Bill not yet generated for the consumer id");
         return ResponseEntity
                 .badRequest()
-                .body("Consumer Id is not found. Please provide the correct consumer ID");
+                .body(error);
     }
 
+
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
+//        return ResponseEntity
+//                .badRequest()
+//                .body("Consumer Id is not found. Please provide the correct consumer ID");
+//    }
+
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
+    public ResponseEntity<Map<String, String>> handleNoSuchElementException(NoSuchElementException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Consumer Id is not found. Please provide the correct consumer ID");
         return ResponseEntity
                 .badRequest()
-                .body("Consumer Id is not found. Please provide the correct consumer ID");
+                .body(error);
     }
 }
